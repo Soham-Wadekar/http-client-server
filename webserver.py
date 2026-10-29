@@ -1,4 +1,5 @@
 import sys
+import json
 import socket
 
 def server(port):
@@ -13,12 +14,22 @@ def server(port):
             client_socket, client_addr = s.accept()
             
             with client_socket:
-                print(f"Connection from {client_addr}")
-                
                 data = client_socket.recv(4096)
-                print(data.decode("ISO-8859-1"))
+                request = data.decode("ISO-8859-1")
+                method = request.split("\r\n")[0].split()[0]
+                payload = request.split("\r\n\r\n", 1)[1].splitlines()
+                ip, client_port = client_addr
                 
-                body = b"Hello!"
+                details = {
+                    "ip": ip,
+                    "port": client_port,
+                    "method": method,
+                    "payload": payload,
+                }
+
+                print(json.dumps(details))
+
+                body = b"Thanks for contacting the webserver!"
                 response = (
                     b"HTTP/1.1 200 OK\r\n"
                     b"Content-Type: text/plain\r\n"
