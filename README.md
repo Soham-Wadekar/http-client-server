@@ -82,4 +82,3 @@ Once the server is running, connect to it using the client or a web browser at `
 - Python 3
 - TCP sockets
 - HTTP/1.1
-- Git
